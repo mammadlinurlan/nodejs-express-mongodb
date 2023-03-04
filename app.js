@@ -93,6 +93,33 @@ app.post('/login', async (req, res) => {
     }
 })
 
+app.put('/orderstatus', (req, res) => {
+console.log(Number(req.query.status))
+    Order.updateOne({ _id: req.query.orderId }, { $set: { 'status': Number(req.query.status) } })
+        .then((r) => {
+            User.findOne({ _id: req.query.userId }, (err, user) => {
+                const selectorder = user.orders.find((o) => o._id == req.query.orderId)
+                selectorder.status = Number(req.query.status);
+                user.orders = user.orders.filter((i) => i._id != req.query.orderId)
+                user.orders.push(selectorder)
+                User.updateOne({ _id: req.query.userId }, { $set: { 'orders': user.orders } })
+                    .then((obj) => {
+                        Order.find()
+                        .then((result)=>{
+                            res.send(result)
+                        })
+                        // res.send()
+                    })
+                    .catch((err) => {
+                        res.sendStatus(401)
+                    })
+            })
+        })
+        .catch((err) => {
+            res.send(err)
+        })
+})
+
 app.get('/cookietest', (req, res) => {
     res.cookie('testcookie', 'salamlar')
     res.send('salam')
@@ -174,17 +201,17 @@ app.post('/addproduct', upload.single('image'), (req, res) => {
         })
 })
 
-app.put('/updateproduct/:phoneId', upload.single('image'), (req, res) => {
+app.put('/updateproduct/:productId', upload.single('image'), (req, res) => {
     console.log(req.body)
     console.log(req.file)
-    const phoneId = req.params.phoneId
+    const productId = req.params.productId
     if (req.body.name == '' || Number(req.body.price) == 0) {
         res.sendStatus(400)
         return
     }
-    console.log(phoneId)
+    console.log(productId)
 
-    Product.findOne({ _id: phoneId }, (error, prod) => {
+    Product.findOne({ _id: productId }, (error, prod) => {
         prod.name = req.body.name
         prod.stock = Number(req.body.stock)
         prod.price = Number(req.body.price)
@@ -211,7 +238,10 @@ app.put('/updateproduct/:phoneId', upload.single('image'), (req, res) => {
 app.delete('/deleteproduct/:itemId', (req, res) => {
     const { itemId } = req.params
     Product.findOneAndDelete({ _id: itemId }, (err, prod) => {
-        res.sendStatus(200)
+       Product.find()
+       .then((r)=>{
+            res.send(r)
+       })
     })
 })
 
@@ -423,7 +453,7 @@ app.post('/makeorder/:userId', (req, res) => {
     console.log(id)
     console.log(req.body)
     User.findOne({ _id: id }, (err, user) => {
-      
+
         if (user.basket.length == 0) {
             res.sendStatus(401)
             return
@@ -432,11 +462,11 @@ app.post('/makeorder/:userId', (req, res) => {
         user.orders.push(order)
         user.basket = []
         user.save();
-        order.save() 
+        order.save()
         res.sendStatus(200)
 
     })
-}) 
+})
 
 app.get('/getuser/:id', (req, res) => {
     const id = req.params.id
@@ -513,8 +543,8 @@ app.post('/addtobasket', (req, res) => {
     // console.log(basketItem)
 })
 
-app.get('/specialbasket',(req,res)=>{
-    User.findOne({username:'nurlan'},(err,user)=>{
+app.get('/specialbasket', (req, res) => {
+    User.findOne({ username: 'nurlan' }, (err, user) => {
         res.send(user.basket)
     })
 })
@@ -554,14 +584,43 @@ app.get('/test', (req, res, next) => {
                 res.sendStatus(401);
             }
             else {
-                res.sendStatus(200)
-                console.log("decoded" + decoded)
+                res.send(decoded.id)
             }
         })
     }
     else {
         res.sendStatus(404)
     }
+})
+
+app.get('/testadmin', (req, res, next) => {
+    const token = req.cookies.jwt;
+    if (token) {
+        jwt.verify(token, 'secretkey', (err, decoded) => {
+            if (err) {
+                console.log(err)
+                res.sendStatus(401)
+            }
+            else {
+                User.findOne({ _id: decoded.id }, (err, user) => {
+                    user.isadmin ? res.sendStatus(200) : res.sendStatus(201)
+                })
+            }
+        })
+    }
+    else {
+        res.sendStatus(404)
+    }
+})
+
+app.get('/orders', (req, res) => {
+    Order.find()
+        .then((result) => {
+            res.send(result)
+        })
+        .catch((err) => {
+            res.send(err)
+        })
 })
 
 app.post('/admin', async (req, res) => {

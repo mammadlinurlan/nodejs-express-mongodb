@@ -3,128 +3,133 @@ const bcrypt = require('bcrypt')
 const schema = mongoose.Schema
 
 const userSchema = new schema({
-    username:{
-        type:String,
-        require:true,
-        unique:true
+    username: {
+        type: String,
+        require: true,
+        unique: true
     },
-    password:{
-        type:String,
-        require:true
+    password: {
+        type: String,
+        require: true
     },
-    confirmpassword:{
-        type:String,
-        require:true
+    confirmpassword: {
+        type: String,
+        require: true
     },
-    email:{
-        type:String,
-        require:true,
-        unique:true
+    email: {
+        type: String,
+        require: true,
+        unique: true
     },
-    isadmin:{
-      type:Boolean,
-      default:false
+    isadmin: {
+        type: Boolean,
+        default: false
     }
     ,
-    date:{
-        type:Date,
-        default:Date.now
+    date: {
+        type: Date,
+        default: Date.now
     },
-    basketItems:[
+    basketItems: [
         {
-            itemId:String,
-            count:Number
+            itemId: String,
+            count: Number
         }
     ]
     ,
-    basket:[
+    basket: [
 
     ],
-    orders:[
+    orders: [
         {
-            orderItems : [],
+            orderItems: [],
 
-    status:{
-        type : Number,
-        default : 1
-    },
-    date:{
-        type:Date,
-        default:Date.now
-    },
-    address : {
-        type:String,
-        required : true
-    },
-    name : {
-        type:String,
-        required : true
-    },
-      surname : {
-        type:String,
-        required : true
-    },  
-    city : {
-        type:String,
-        required : true
-    }, 
-     state : {
-        type:String,
-        required : true
-    },
-    zip : {
-        type:String,
-        required : true
-    },
-    phone : {
-        type:String,
-        required : true
-    },
-    totalPrice : {
-        type: Number,
-        required : true
-    }
+            status: {
+                type: Number,
+                default: 1
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            },
+            address: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            },
+            surname: {
+                type: String,
+                required: true
+            },
+            city: {
+                type: String,
+                required: true
+            },
+            state: {
+                type: String,
+                required: true
+            },
+            zip: {
+                type: String,
+                required: true
+            },
+            phone: {
+                type: String,
+                required: true
+            },
+            country: {
+                type: String,
+                required: true
+            },
+            totalPrice: {
+                type: Number,
+                required: true
+            },
+            userId : {
+                type : String,
+                required : true
+            }
         }
     ]
-},{timestamps:true})
+}, { timestamps: true })
 
-userSchema.statics.login = async function(username,password){
-    const user =await this.findOne({username})
-    if(user){
+userSchema.statics.login = async function (username, password) {
+    const user = await this.findOne({ username })
+    if (user) {
         // const auth = await bcrypt.compare(password,user.password)
-        if(user.password == password){
+        if (user.password == password) {
             return user
         }
-        else{
+        else {
             throw Error('incorrect password')
         }
     }
-    else
-    {
+    else {
         throw Error('User not found')
     }
 }
 
-userSchema.statics.adminlogin = async function(username,password){
-    const user =await this.findOne({username})
-    if(user){
-        if(user.isadmin)
-        {
-            const auth = await bcrypt.compare(password,user.password)
-            if(auth){
+userSchema.statics.adminlogin = async function (username, password) {
+    const user = await this.findOne({ username })
+    if (user) {
+        if (user.isadmin) {
+            const auth = await bcrypt.compare(password, user.password)
+            if (auth) {
                 return user
             }
-            else{
+            else {
                 throw Error('incorrect password')
             }
         }
-        else{
+        else {
             throw Error('you are not admin')
         }
-       
+
     }
-    else
-    {
+    else {
         throw Error('User not found')
     }
 }
@@ -135,5 +140,5 @@ userSchema.statics.adminlogin = async function(username,password){
 //     next()
 // })
 
-const User = mongoose.model('User',userSchema);
+const User = mongoose.model('User', userSchema);
 module.exports = User

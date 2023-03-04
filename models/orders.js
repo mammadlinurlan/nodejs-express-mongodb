@@ -4,7 +4,11 @@ const schema = mongoose.Schema
 
 const orderSchema = new schema({
     orderItems : [],
-
+    userId : {
+        type : String,
+        required : true
+    }
+    ,
     status:{
         type : Number,
         default : 1
@@ -14,6 +18,10 @@ const orderSchema = new schema({
         default:Date.now
     },
     address : {
+        type:String,
+        required : true
+    },
+    country : {
         type:String,
         required : true
     },
