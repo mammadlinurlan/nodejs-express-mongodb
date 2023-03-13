@@ -13,6 +13,6 @@
   }
   ,
   "scripts": {
-    "start": "nodemon app"}
+    "start": "node app.js"}
 }
 
