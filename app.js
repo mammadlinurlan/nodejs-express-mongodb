@@ -32,7 +32,7 @@ var upload = multer({
 
 
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.port || 3000
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose')
@@ -66,7 +66,7 @@ app.use(cors({ credentials: true, origin: ["http://localhost:3001", "http://www.
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
-app.use(express.static('uploads'));
+app.use(express.static('uploads')); 
 app.use('/uploads', express.static('uploads'));
  
 app.post('/login', async (req, res) => {
