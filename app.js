@@ -32,7 +32,7 @@ var upload = multer({
 
 
 
-
+const PORT = process.env.PORT || 3000
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose')
@@ -52,7 +52,7 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err)
     })
 app.set('view engine', 'ejs')
-app.listen(3000)
+app.listen(PORT)
 app.use(express.static('public'))
 app.use(morgan('dev'))
 const cookieParser = require('cookie-parser');
@@ -65,7 +65,7 @@ app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 app.use(express.static('uploads'));
 app.use('/uploads', express.static('uploads'));
-
+ 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
     console.log(req.body)
