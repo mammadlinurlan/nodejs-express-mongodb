@@ -52,7 +52,9 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err)
     })
 app.set('view engine', 'ejs')
-app.listen(process.env.PORT, '0.0.0.0')
+app.listen(PORT, '0.0.0.0',()=>{
+    console.log(`connected on port ${PORT}`)
+})
 
 app.use(express.static('public'))
 app.use(morgan('dev'))
