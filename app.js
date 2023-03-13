@@ -52,7 +52,10 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err)
     })
 app.set('view engine', 'ejs')
-app.listen(PORT)
+app.listen(PORT,()=>{
+    console.log(`Listening on ${PORT}`)
+})
+
 app.use(express.static('public'))
 app.use(morgan('dev'))
 const cookieParser = require('cookie-parser');
