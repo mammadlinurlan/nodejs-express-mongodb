@@ -77,7 +77,7 @@ app.post('/login', async (req, res) => {
         console.log(user._id)
         const token = createToken(user._id)
         console.log("token", token);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 })
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, domain:'https://morning-peak-77048.herokuapp.com' })
 
         const IUser = {
             id: user._id,
