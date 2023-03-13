@@ -66,7 +66,7 @@ const cookieParser = require('cookie-parser');
 const { result } = require('lodash');
 const Order = require('./models/orders');
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: ["https://master--zippy-rolypoly-67da9b.netlify.app,http://localhost:3001","http://localhost:3000", "http://www.safbal.az", "http://localhost:3002"] }));
+app.use(cors({ credentials: true, origin: ["https://master--zippy-rolypoly-67da9b.netlify.app/",",http://localhost:3001","http://localhost:3000", "http://www.safbal.az", "http://localhost:3002"] }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
