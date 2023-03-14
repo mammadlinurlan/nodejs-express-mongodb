@@ -506,6 +506,7 @@ app.post('/addtobasket', (req, res) => {
     console.log(basketItem)
 
     const userId = req.body.userId
+    console.log(userId)
     User.findOne({ _id: userId }, (err, user) => {
         if (user) {
             if (user.basket.some((item) => item._id == req.body._id)) {
