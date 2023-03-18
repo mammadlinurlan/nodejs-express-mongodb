@@ -592,7 +592,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/test', (req, res, next) => {
     const token = req.cookies.jwt;
-    console.log('token' + token)
+    console.log('tokeni budu' + token)
     if (token) {
         jwt.verify(token, 'secretkey', (err, decoded) => {
             if (err) {
