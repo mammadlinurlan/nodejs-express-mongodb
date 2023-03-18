@@ -510,6 +510,7 @@ app.post('/addtobasket', (req, res) => {
     }
 
     console.log(basketItem)
+    console.log(`userid is : ${req.body.userId}  ,  product is : ${req.body.name}`)
 
     const userId = req.body.userId
     console.log(userId)
