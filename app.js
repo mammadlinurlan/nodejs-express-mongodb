@@ -80,7 +80,7 @@ app.post('/login', async (req, res) => {
         const user = await User.login(username, password)
         console.log(user._id)
         const token = createToken(user._id)
-        console.log("token", token);
+        console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
         secure: true, })
 
@@ -728,9 +728,9 @@ app.get('/about', (req, res) => {
     res.render('about')
 })
 
-app.get('/login', (req, res) => {
-    res.render('login')
-})
+// app.get('/login', (req, res) => {
+//     res.render('login')
+// })
 
 app.use((req, res) => {
     res.status(400).render('404')
