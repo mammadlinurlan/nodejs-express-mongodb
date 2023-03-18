@@ -300,6 +300,12 @@ app.get('/fortype', (req, res) => {
         })
 })
 
+app.get('/users', (req, res) => {
+    User.find()
+        .then(result => {
+            res.send(result)
+        })
+})
 
 
 app.get('/getimage', (req, res) => {
