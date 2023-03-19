@@ -33,6 +33,8 @@ var upload = multer({
 
 
 const PORT = process.env.PORT || 3000
+
+const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose')
@@ -45,10 +47,6 @@ const JWT_SECRET =
 const createToken = (id) => {
     return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge },process.env.JWT_TOKEN_SECRET)
 }
-// const token = jwt.sign(
-//     { userId: user._id, userName: user.user },
-//     process.env.JWT_TOKEN_SECRET
-//   );
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res) => {
         console.log('connected')
@@ -59,20 +57,20 @@ app.set('view engine', 'ejs')
 app.listen(PORT, '0.0.0.0',()=>{
     console.log(`connected on port ${PORT}`)
 })
-
+app.use(cookieParser());
 app.use(express.static('public'))
 app.use(morgan('dev'))
-const cookieParser = require('cookie-parser');
 const { result } = require('lodash');
 const Order = require('./models/orders');
-app.use(cookieParser());
 app.use(cors({ credentials: true, origin: ["https://takehiq.netlify.app","https://master--zippy-rolypoly-67da9b.netlify.app",",http://localhost:3001","http://localhost:3000", "http://www.safbal.az", "http://localhost:3001"] }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 app.use(express.static('uploads')); 
 app.use('/uploads', express.static('uploads'));
- 
+
+
+
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
     console.log(req.body)
@@ -722,6 +720,11 @@ app.delete('/deletephone/:id', (req, res) => {
 
 app.get('/', (req, res) => {
     res.render('index', { title: 'HomePage' })
+        // Cookies that have not been signed
+        console.log('Cookies: ', req.cookies)
+  
+        // Cookies that have been signed
+        console.log('Signed Cookies: ', req.signedCookies)
 })
 
 app.get('/about', (req, res) => {
