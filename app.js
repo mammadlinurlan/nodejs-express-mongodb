@@ -73,14 +73,12 @@ app.post('/login', async (req, res) => {
     const { username, password } = req.body
     console.log(req.body)
     try {
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         const user = await User.login(username, password)
         console.log(user._id)
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-         })
+        secure: true, })
 
         const IUser = {
             id: user._id,
