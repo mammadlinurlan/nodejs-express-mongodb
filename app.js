@@ -43,8 +43,9 @@ const { requireauth } = require('./middlewares/authMiddleware')
 const JWT_SECRET =
     "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 const createToken = (id) => {
-    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge },process.env.JWT_TOKEN_SECRET)
+    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge })
 }
+// process.env.JWT_TOKEN_SECRET
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res) => {
         console.log('connected')
@@ -77,8 +78,8 @@ app.post('/login', async (req, res) => {
         console.log(user._id)
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-        secure: true, })
+        res.cookie('jwt', token, { httpOnly: false, maxAge: maxAge * 1000,sameSite: "none",
+         })
 
         const IUser = {
             id: user._id,
@@ -588,6 +589,7 @@ app.get('/logout', (req, res) => {
 
 app.get('/test', (req, res, next) => {
     const token = req.cookies.jwt;
+    console.log(req.cookies)
     console.log('tokeni budu' + token)
     if (token) {
         jwt.verify(token, 'secretkey', (err, decoded) => {
