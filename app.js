@@ -33,8 +33,6 @@ var upload = multer({
 
 
 const PORT = process.env.PORT || 3000
-
-// const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose')
@@ -53,25 +51,24 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     }).catch((err) => {
         console.log(err)
     })
-// app.use(cookieParser("Mysecret"));
-
 app.set('view engine', 'ejs')
 app.listen(PORT, '0.0.0.0',()=>{
     console.log(`connected on port ${PORT}`)
 })
+
 app.use(express.static('public'))
 app.use(morgan('dev'))
+const cookieParser = require('cookie-parser');
 const { result } = require('lodash');
 const Order = require('./models/orders');
+app.use(cookieParser());
 app.use(cors({ credentials: true, origin: ["https://takehiq.netlify.app","https://master--zippy-rolypoly-67da9b.netlify.app",",http://localhost:3001","http://localhost:3000", "http://www.safbal.az", "http://localhost:3001"] }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
 app.use(express.static('uploads')); 
 app.use('/uploads', express.static('uploads'));
-
-
-
+ 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
     console.log(req.body)
@@ -81,7 +78,7 @@ app.post('/login', async (req, res) => {
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-        secure: true})
+        secure: true, })
 
         const IUser = {
             id: user._id,
@@ -721,11 +718,6 @@ app.delete('/deletephone/:id', (req, res) => {
 
 app.get('/', (req, res) => {
     res.render('index', { title: 'HomePage' })
-        // Cookies that have not been signed
-        console.log('Cookies: ', req.cookies)
-  
-        // Cookies that have been signed
-        console.log('Signed Cookies: ', req.signedCookies.jwt)
 })
 
 app.get('/about', (req, res) => {
