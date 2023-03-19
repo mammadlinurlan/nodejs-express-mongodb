@@ -80,7 +80,7 @@ app.post('/login', async (req, res) => {
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-        secure: true, })
+        secure: true,signed : true })
 
         const IUser = {
             id: user._id,
