@@ -53,11 +53,12 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     }).catch((err) => {
         console.log(err)
     })
+app.use(cookieParser("Mysecret"));
+
 app.set('view engine', 'ejs')
 app.listen(PORT, '0.0.0.0',()=>{
     console.log(`connected on port ${PORT}`)
 })
-app.use(cookieParser());
 app.use(express.static('public'))
 app.use(morgan('dev'))
 const { result } = require('lodash');
@@ -724,7 +725,7 @@ app.get('/', (req, res) => {
         console.log('Cookies: ', req.cookies)
   
         // Cookies that have been signed
-        console.log('Signed Cookies: ', req.signedCookies)
+        console.log('Signed Cookies: ', req.signedCookies.jwt)
 })
 
 app.get('/about', (req, res) => {
