@@ -79,7 +79,7 @@ app.post('/login', async (req, res) => {
         console.log(user._id)
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
-        res.cookie('jwt', token, { httpOnly: false, maxAge: maxAge * 1000,sameSite: "none",
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
          })
 
         const IUser = {
