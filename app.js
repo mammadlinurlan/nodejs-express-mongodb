@@ -34,7 +34,7 @@ var upload = multer({
 
 const PORT = process.env.PORT || 3000
 
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const app = express();
 const cors = require('cors');
 const mongoose = require('mongoose')
@@ -53,7 +53,7 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     }).catch((err) => {
         console.log(err)
     })
-app.use(cookieParser("Mysecret"));
+// app.use(cookieParser("Mysecret"));
 
 app.set('view engine', 'ejs')
 app.listen(PORT, '0.0.0.0',()=>{
@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-        secure: true,signed : true })
+        secure: true})
 
         const IUser = {
             id: user._id,
