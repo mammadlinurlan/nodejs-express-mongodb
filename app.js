@@ -43,9 +43,8 @@ const { requireauth } = require('./middlewares/authMiddleware')
 const JWT_SECRET =
     "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 const createToken = (id) => {
-    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge })
+    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge },process.env.JWT_TOKEN_SECRET)
 }
-// process.env.JWT_TOKEN_SECRET
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res) => {
         console.log('connected')
