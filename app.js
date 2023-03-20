@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
         secure: true,domain : 'takehiq.netlify.app' })
 
         const IUser = {
-            _id: user._id,
+            id: user._id,
             username: user.username,
             email: user.email,
             isadmin: user.isadmin,
@@ -476,7 +476,7 @@ app.post('/makeorder/:userId', (req, res) => {
         res.sendStatus(200)
 
     })
-    
+
 })
 
 app.get('/getuser/:id', (req, res) => {
