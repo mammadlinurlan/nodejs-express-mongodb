@@ -99,6 +99,12 @@ app.post('/login', async (req, res) => {
     }
 })
 
+app.get('/orders',(req,res)=>{
+    Order.find((result)=>{
+        res.reverse().send(result)
+    })
+})
+
 app.put('/orderstatus', (req, res) => {
     console.log(Number(req.query.status))
     Order.updateOne({ _id: req.query.orderId }, { $set: { 'status': Number(req.query.status) } })
