@@ -79,7 +79,7 @@ app.post('/login', async (req, res) => {
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
         res.cookie('jwt', token, {
             httpOnly: true, maxAge: maxAge * 1000, sameSite: "none",
-            secure: true, domain: 'takehiq.netlify.app'
+            secure: true
         })
 
         const IUser = {
