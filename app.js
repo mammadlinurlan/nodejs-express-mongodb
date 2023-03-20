@@ -262,6 +262,7 @@ app.delete('/deleteuser/:userId', (req, res) => {
         }
     })
 })
+ 
 
 app.put('/giverole/:userId', (req, res) => {
     const { userId } = req.params
