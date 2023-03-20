@@ -81,7 +81,7 @@ app.post('/login', async (req, res) => {
         secure: true,domain : 'takehiq.netlify.app' })
 
         const IUser = {
-            id: user._id,
+            _id: user._id,
             username: user.username,
             email: user.email,
             isadmin: user.isadmin,
@@ -484,7 +484,7 @@ app.get('/getuser/:id', (req, res) => {
     console.log(id)
     User.findOne({ _id: id }, (err, user) => {
         const IUser = {
-            id: user._id,
+            _id: user._id,
             username: user.username,
             email: user.email,
             isadmin: user.isadmin,
