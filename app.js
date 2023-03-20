@@ -43,7 +43,7 @@ const { requireauth } = require('./middlewares/authMiddleware')
 const JWT_SECRET =
     "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 const createToken = (id) => {
-    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge },process.env.JWT_TOKEN_SECRET)
+    return jwt.sign({ id }, 'secretkey', { expiresIn: maxAge }, process.env.JWT_TOKEN_SECRET)
 }
 mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((res) => {
@@ -52,7 +52,7 @@ mongoose.connect(dbUrl, { useNewUrlParser: true, useUnifiedTopology: true })
         console.log(err)
     })
 app.set('view engine', 'ejs')
-app.listen(PORT, '0.0.0.0',()=>{
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`connected on port ${PORT}`)
 })
 
@@ -62,13 +62,13 @@ const cookieParser = require('cookie-parser');
 const { result } = require('lodash');
 const Order = require('./models/orders');
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: ["takehiq.netlify.app","https://takehiq.netlify.app","https://master--zippy-rolypoly-67da9b.netlify.app",",http://localhost:3001","http://localhost:3000", "http://www.safbal.az", "http://localhost:3001"] }));
+app.use(cors({ credentials: true, origin: ["takehiq.netlify.app", "https://takehiq.netlify.app", "https://master--zippy-rolypoly-67da9b.netlify.app", ",http://localhost:3001", "http://localhost:3000", "http://www.safbal.az", "http://localhost:3001"] }));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ limit: '25mb', extended: true }));
 
-app.use(express.static('uploads')); 
+app.use(express.static('uploads'));
 app.use('/uploads', express.static('uploads'));
- 
+
 app.post('/login', async (req, res) => {
     const { username, password } = req.body
     console.log(req.body)
@@ -77,8 +77,10 @@ app.post('/login', async (req, res) => {
         console.log(user._id)
         const token = createToken(user._id)
         console.log(`girildi , tokeni : ${token} , adi : ${user.username}`);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000,sameSite: "none",
-        secure: true,domain : 'takehiq.netlify.app' })
+        res.cookie('jwt', token, {
+            httpOnly: true, maxAge: maxAge * 1000, sameSite: "none",
+            secure: true, domain: 'takehiq.netlify.app'
+        })
 
         const IUser = {
             _id: user._id,
@@ -98,7 +100,7 @@ app.post('/login', async (req, res) => {
 })
 
 app.put('/orderstatus', (req, res) => {
-console.log(Number(req.query.status))
+    console.log(Number(req.query.status))
     Order.updateOne({ _id: req.query.orderId }, { $set: { 'status': Number(req.query.status) } })
         .then((r) => {
             User.findOne({ _id: req.query.userId }, (err, user) => {
@@ -109,9 +111,9 @@ console.log(Number(req.query.status))
                 User.updateOne({ _id: req.query.userId }, { $set: { 'orders': user.orders } })
                     .then((obj) => {
                         Order.find()
-                        .then((result)=>{
-                            res.send(result)
-                        })
+                            .then((result) => {
+                                res.send(result)
+                            })
                         // res.send()
                     })
                     .catch((err) => {
@@ -242,22 +244,35 @@ app.put('/updateproduct/:productId', upload.single('image'), (req, res) => {
 app.delete('/deleteproduct/:itemId', (req, res) => {
     const { itemId } = req.params
     Product.findOneAndDelete({ _id: itemId }, (err, prod) => {
-       Product.find()
-       .then((r)=>{
-            res.send(r)
-       })
+        Product.find()
+            .then((r) => {
+                res.send(r)
+            })
     })
 })
 
-app.delete('/deleteuser/:userId',(req,res)=>{
-    const {userId} = req.params
-    User.findOneAndDelete({_id : userId},(err,user) => {
-        if(err){
+app.delete('/deleteuser/:userId', (req, res) => {
+    const { userId } = req.params
+    User.findOneAndDelete({ _id: userId }, (err, user) => {
+        if (err) {
             res.sendStatus(500)
         }
-        else{
+        else {
             res.sendStatus(200)
         }
+    })
+})
+
+app.put('/giverole/:userId', (req, res) => {
+    const { userId } = req.params
+    User.findOne({ _id: userId }, (err, u) => {
+        User.findOneAndUpdate({ _id: userId }, { $set: { isadmin : !u.isadmin  } })
+        .then(()=>{
+            res.sendStatus(200)
+        })
+        .catch(()=>{
+            res.sendStatus(401)
+        })
     })
 })
 
