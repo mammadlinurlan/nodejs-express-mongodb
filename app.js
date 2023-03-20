@@ -249,6 +249,18 @@ app.delete('/deleteproduct/:itemId', (req, res) => {
     })
 })
 
+app.delete('/deleteuser/:userId',(req,res)=>{
+    const {userId} = req.params
+    User.findOneAndDelete({_id : userId},(err,user) => {
+        if(err){
+            res.sendStatus(500)
+        }
+        else{
+            res.sendStatus(200)
+        }
+    })
+})
+
 app.get('/searchproducts/:searchString', (req, res) => {
     const { searchString } = req.params
     let products;
