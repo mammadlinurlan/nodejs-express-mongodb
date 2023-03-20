@@ -99,7 +99,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.get('/orders',(req,res)=>{
+app.get('/getorders',(req,res)=>{
     Order.find((result)=>{
         res.reverse().send(result)
     })
